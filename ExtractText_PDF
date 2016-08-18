@@ -1,0 +1,96 @@
+Extract Text From PDF Java
+
+Using Apache PDFBox library, we can extract text/strings from a pdf file. In this example, we extract text from a pdf file named "test.pdf". We create a maven based project and add Apache PDFBox library dependency in the pom.xml file. 
+
+<dependency>
+     <groupId>org.apache.pdfbox</groupId>
+     <artifactId>pdfbox</artifactId>
+     <version>1.8.9</version>
+ </dependency>
+Write the following code in the "ReadPdfText.java" class.
+
+
+package com.example.Pdf;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.util.PDFTextStripper;
+
+import java.io.IOException;
+
+public class ReadPdfText {
+    public static void main(String[] args)
+    {
+        try {
+            //load the pdf document
+            PDDocument pdDocument=PDDocument.load("test.pdf");
+            //count total pages
+            int totalPages= pdDocument.getNumberOfPages();
+            //print out total page numbers
+            System.out.println("Total pages: " +totalPages);
+            //define a PDF file stripper object
+            PDFTextStripper stripper = new PDFTextStripper();
+            //set start page to 1
+            stripper.setStartPage( 1 );
+            //set end page to total pages
+            stripper.setEndPage( totalPages );
+          String extractedText= stripper.getText(pdDocument);
+            System.out.println(extractedText);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Run the code above and see the result below .
+
+Total pages: 1
+This is the line at position   20.0 ,772.0
+This is the line at position   20.0 ,757.0
+This is the line at position   20.0 ,742.0
+This is the line at position   20.0 ,727.0
+This is the line at position   20.0 ,712.0
+This is the line at position   20.0 ,697.0
+This is the line at position   20.0 ,682.0
+This is the line at position   20.0 ,667.0
+This is the line at position   20.0 ,652.0
+This is the line at position   20.0 ,637.0
+This is the line at position   20.0 ,622.0
+This is the line at position   20.0 ,607.0
+This is the line at position   20.0 ,592.0
+This is the line at position   20.0 ,577.0
+This is the line at position   20.0 ,562.0
+This is the line at position   20.0 ,547.0
+This is the line at position   20.0 ,532.0
+This is the line at position   20.0 ,517.0
+This is the line at position   20.0 ,502.0
+This is the line at position   20.0 ,487.0
+This is the line at position   20.0 ,472.0
+This is the line at position   20.0 ,457.0
+This is the line at position   20.0 ,442.0
+This is the line at position   20.0 ,427.0
+This is the line at position   20.0 ,412.0
+This is the line at position   20.0 ,397.0
+This is the line at position   20.0 ,382.0
+This is the line at position   20.0 ,367.0
+This is the line at position   20.0 ,352.0
+This is the line at position   20.0 ,337.0
+This is the line at position   20.0 ,322.0
+This is the line at position   20.0 ,307.0
+This is the line at position   20.0 ,292.0
+This is the line at position   20.0 ,277.0
+This is the line at position   20.0 ,262.0
+This is the line at position   20.0 ,247.0
+This is the line at position   20.0 ,232.0
+This is the line at position   20.0 ,217.0
+This is the line at position   20.0 ,202.0
+This is the line at position   20.0 ,187.0
+This is the line at position   20.0 ,172.0
+This is the line at position   20.0 ,157.0
+This is the line at position   20.0 ,142.0
+This is the line at position   20.0 ,127.0
+This is the line at position   20.0 ,112.0
+This is the line at position   20.0 ,97.0
+This is the line at position   20.0 ,82.0
+This is the line at position   20.0 ,67.0
+This is the line at position   20.0 ,52.0
+This is the line at position   20.0 ,37.0
