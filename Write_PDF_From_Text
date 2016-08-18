@@ -1,0 +1,157 @@
+Create Pdf In Java
+
+The Apache PDFBox™ library is an open source Java tool for working with PDF documents. This library allows creation of new PDF documents, manipulation of existing documents and the ability to extract content from documents. Apache PDFBox also includes several command line utilities. This article explains how to create a pdf file with multiple lines of words using Apache PDFBox library. 
+
+We create a maven based project and add Apache PDFBox library in the pom.xml file. 
+
+<dependency>
+    <groupId>org.apache.pdfbox</groupId>
+    <artifactId>pdfbox</artifactId>
+    <version>1.8.9</version>
+</dependency>
+Write the following code in the "CreatePdfDocument.java" class.
+
+ 
+
+package com.example.Pdf;
+
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+
+import java.awt.*;
+import java.io.IOException;
+
+public class CreatePdfDocument {
+
+    public static void main(String[] args)
+    {
+        // Create a new empty document
+        PDDocument pdDocument=new PDDocument();
+        // Create a new blank page in letter size and add it to the document
+        PDPage pdPage=new PDPage(PDPage.PAGE_SIZE_LETTER);
+        pdDocument.addPage( pdPage );
+        //get the pdf dpi
+        PDRectangle cropBox = pdPage.findCropBox();
+        Dimension dimension = cropBox.createDimension();
+        System.out.println("dpi is :    "+dimension);
+        //get the page width and page height
+        int pageWidth=dimension.width;
+        int pageHeight=dimension.height;
+        //set page top and bottom margin
+        int topMargin=20;
+        int bottomMargin=20;
+        int leftMargin=20;
+        int rightMargin=20;
+        //pdf size
+        //maximum Y position
+       float maxY=(pageHeight-topMargin);
+        //minimum y position
+        float minY=bottomMargin;
+        //maximum x position
+        float maxX=(pageWidth-rightMargin);
+        //minimum x position
+        float minX=leftMargin;
+        // Create a new font object selecting one of the PDF base fonts
+        PDFont font = PDType1Font.TIMES_ROMAN;
+        try {
+            // Start a new content stream which will "hold" the to be created content
+            PDPageContentStream contentStream = new PDPageContentStream(pdDocument, pdPage);
+            //set font size 12
+            contentStream.setFont( font, 12 );
+            //set line height 15
+            float lineHeight=15;
+            //begin text
+           contentStream.beginText();
+            //move cursor to initial x and y position from the top
+            contentStream.moveTextPositionByAmount(minX, maxY);
+            //write a line
+            contentStream.drawString("This is the line at position   "+ minX +" ,"+maxY);
+            //loop to print multiple lines
+            for(int line=2;line<maxY;line++)
+           {
+               //maxY reduce by line height
+               maxY=maxY-lineHeight;
+               //move cursor to down by line height
+               contentStream.moveTextPositionByAmount(0, -lineHeight);
+               //write a line
+               contentStream.drawString("This is the line at position   "+ minX +" ,"+maxY);
+               //break if maxY is less than min Y
+               if(maxY<=minY)
+                   break;
+           }
+            //close the text
+            contentStream.endText();
+            //close the stream
+            contentStream.close();
+            try {
+                //save the file
+                pdDocument.save("test.pdf");
+                //close the file
+                pdDocument.close();
+            } catch (COSVisitorException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Run the code and open the created pdf file "test.pdf". The content of the file is
+
+This is the line at position 20.0 ,772.0
+This is the line at position 20.0 ,757.0
+This is the line at position 20.0 ,742.0
+This is the line at position 20.0 ,727.0
+This is the line at position 20.0 ,712.0
+This is the line at position 20.0 ,697.0
+This is the line at position 20.0 ,682.0
+This is the line at position 20.0 ,667.0
+This is the line at position 20.0 ,652.0
+This is the line at position 20.0 ,637.0
+This is the line at position 20.0 ,622.0
+This is the line at position 20.0 ,607.0
+This is the line at position 20.0 ,592.0
+This is the line at position 20.0 ,577.0
+This is the line at position 20.0 ,562.0
+This is the line at position 20.0 ,547.0
+This is the line at position 20.0 ,532.0
+This is the line at position 20.0 ,517.0
+This is the line at position 20.0 ,502.0
+This is the line at position 20.0 ,487.0
+This is the line at position 20.0 ,472.0
+This is the line at position 20.0 ,457.0
+This is the line at position 20.0 ,442.0
+This is the line at position 20.0 ,427.0
+This is the line at position 20.0 ,412.0
+This is the line at position 20.0 ,397.0
+This is the line at position 20.0 ,382.0
+This is the line at position 20.0 ,367.0
+This is the line at position 20.0 ,352.0
+This is the line at position 20.0 ,337.0
+This is the line at position 20.0 ,322.0
+This is the line at position 20.0 ,307.0
+This is the line at position 20.0 ,292.0
+This is the line at position 20.0 ,277.0
+This is the line at position 20.0 ,262.0
+This is the line at position 20.0 ,247.0
+This is the line at position 20.0 ,232.0
+This is the line at position 20.0 ,217.0
+This is the line at position 20.0 ,202.0
+This is the line at position 20.0 ,187.0
+This is the line at position 20.0 ,172.0
+This is the line at position 20.0 ,157.0
+This is the line at position 20.0 ,142.0
+This is the line at position 20.0 ,127.0
+This is the line at position 20.0 ,112.0
+This is the line at position 20.0 ,97.0
+This is the line at position 20.0 ,82.0
+This is the line at position 20.0 ,67.0
+This is the line at position 20.0 ,52.0
+This is the line at position 20.0 ,37.0
