@@ -1,0 +1,171 @@
+
+Date and Time Manipulation in Java Using JodaTime
+
+Using Joda date time library, we can easily manipulate date and time in Java. This article explains how to use Joda library. We create a maven based java project and add joda library dependency in the pom.xml file. 
+
+<dependency>
+  <groupId>joda-time</groupId>
+  <artifactId>joda-time</artifactId>
+  <version>2.6</version>
+</dependency>
+Add the following code in the "DateTimeExamples.java" class.
+
+package com.example.DataTime;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.Date;
+
+public class DateTimeExamples {
+    public static void main(String[] args) {
+
+        //define joda date time
+        DateTime dt = new DateTime();
+        //get current date time
+        // from Joda to JDK
+        Date currentDateTime = dt.toDate();
+        //print out current date time in simple date time format
+        System.out.println(currentDateTime);
+        //convert jdk date to joda time
+        dt = new DateTime(currentDateTime);
+        //get current day
+       int dow=dt.dayOfMonth().get();
+        System.out.println(dow +"   day");
+        //add few days
+        int daysToAdd=5;
+        int newDay=dt.plusDays(daysToAdd).getDayOfMonth();
+        System.out.println(newDay +"   day");
+        //Get day time property
+        dt=new DateTime(dt.plusDays(daysToAdd));
+        DateTime.Property pDoW = dt.dayOfWeek();
+        String shortDayName=pDoW.getAsShortText();
+        System.out.println("Short Day Name    "+shortDayName);
+        String fullDayName=pDoW.getAsText();
+        System.out.println("Full Day Name    "+fullDayName);
+       //get month info
+        String month = dt.monthOfYear().getAsText();
+        System.out.println("Month is: " +month);
+        int maxDay = dt.dayOfMonth().getMaximumValue();
+        System.out.println("Maximum days: " + maxDay);
+        boolean leapYear = dt.yearOfEra().isLeap();
+        System.out.println( "Is leap year: " + leapYear);
+        //get era, century, month, week, day information
+      System.out.println("Era is :"+  dt.getEra());
+        System.out.println("Year is :"+dt.getYear());
+        System.out.println("Week is :"+dt.getWeekyear());
+        System.out.println("Century  is :"+dt.getCenturyOfEra());
+        System.out.println("Year of Era is :"+dt.getYearOfEra());
+        System.out.println("Year of Century is :"+dt.getYearOfCentury());
+        System.out.println("Month of Year :"+dt.getMonthOfYear());
+        System.out.println("Week of Year :"+dt.getWeekOfWeekyear());
+        System.out.println("Day of Year :"+dt.getDayOfYear());
+        System.out.println("Day of Month:"+dt.getDayOfMonth());
+        System.out.println("Day of Week :"+dt.getDayOfWeek());
+        //format date time
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyyMMMdd");
+        String d = dt.toString(fmt);
+        System.out.println("Time in format yyyyMMdd is "+d);
+        //Date time zone
+        DateTime dt1=new DateTime();
+        Date current=dt1.toDate();
+        dt1=new DateTime(current);
+        DateTimeZone zoneLondon = DateTimeZone.forID("Europe/London");
+        DateTime dtZoneLondon=new DateTime(dt1.withZone(zoneLondon));
+        System.out.println("Date time in London zone    " +dtZoneLondon);
+        DateTimeZone zoneHongkong=DateTimeZone.forID("Asia/Hong_Kong");
+        DateTime dtZoneHongkong=new DateTime(dt1.withZone(zoneHongkong));
+        System.out.println("Date time in Hongkong zone    " +dtZoneHongkong);
+
+    }
+}
+Run the code above and see the result below.
+
+Mon Jun 01 23:48:16 EDT 2015
+1   day
+6   day
+Short Day Name    Sat
+Full Day Name    Saturday
+Month is: June
+Maximum days: 30
+Is leap year: false
+Era is :1
+Year is :2015
+Week is :2015
+Century  is :20
+Year of Era is :2015
+Year of Century is :15
+Month of Year :6
+Week of Year :23
+Day of Year :157
+Day of Month:6
+Day of Week :6
+Time in format yyyyMMdd is 2015Jun06
+Date time in London zone    2015-06-02T04:48:16.654+01:00
+Date time in Hongkong zone    2015-06-02T11:48:16.654+08:00
+For full usage of Joda date and time library, visit the page.
+
+Email
+Print
+Get Unix Time Stamp From Date
+
+In some applications, date time is represented in Unix string format. This article explains how to use Java SimpleDateFormat and Joda libraries to get Unix time stamp from date. We create a maven based project and add the following dependency in the pom.xml file. 
+
+<dependency>
+    <groupId>joda-time</groupId>
+    <artifactId>joda-time</artifactId>
+    <version>2.6</version>
+</dependency>
+Write the following code in the "CurrentUnixTime.java" class.
+
+package com.example.DataTime;
+
+import org.joda.time.DateTime;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class CurrentUnixTime {
+    public static void main(String[] args)
+    {
+        //define simple date time format
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        //define joda date time
+        DateTime dt=new DateTime();
+        //get current date time
+        Date currentDateTime=dt.toDate();
+        //print out current date time in simple date time format
+        System.out.println(currentDateTime);
+        try {
+            //convert current date time to unix format
+            long currentDateTimeEpoch=dateFormat.parse(dateFormat.format(currentDateTime)).getTime();
+            //print out unix format of current date time
+            System.out.println("Current Date Time Unix Format: " +currentDateTimeEpoch);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //initialize days to add
+        int daysToadd=30;
+        //add days to current date
+        Date newDate=dt.plusDays(daysToadd).toDate();
+        //print out new date
+        System.out.println("New Date after adding days "+newDate);
+        try {
+            //convert new date to unix string
+            long newDateEpoch=dateFormat.parse(dateFormat.format(newDate)).getTime();
+            //print out new date in unix format
+            System.out.println("New Date Time Unix Format: " +newDateEpoch);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+}
+Run the code above and see the result below.
+
+Sun May 31 22:55:07 EDT 2015
+Current Date Time Unix Format: 1433127307000
+New Date after adding days Tue Jun 30 22:55:07 EDT 2015
+New Date Time Unix Format: 1435719307000
